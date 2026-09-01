@@ -1,5 +1,13 @@
 @use "../../../styles/mixins" as *;
 
+.header-anchor {
+  flex-shrink: 0;
+
+  @include mobile {
+    height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
+  }
+}
+
 .header {
   position: sticky;
   top: 0;
@@ -16,8 +24,7 @@
     box-shadow var(--transition-base);
 
   @include mobile {
-    position: -webkit-sticky;
-    position: sticky;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -25,8 +32,13 @@
     height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
     padding-top: env(safe-area-inset-top, 0px);
     box-sizing: border-box;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    background-color: rgba(252, 250, 242, 0.97);
+
+    [data-theme="dark"] & {
+      background-color: rgba(11, 11, 11, 0.94);
+    }
   }
 
   [data-theme="dark"] & {

@@ -35,10 +35,11 @@ export function Header() {
 
   return (
     <>
-      <header
-        className={cn("header", scrolled && "header_scrolled", menuOpen && "header_menu-open")}
-        role="banner"
-      >
+      <div className="header-anchor">
+        <header
+          className={cn("header", scrolled && "header_scrolled", menuOpen && "header_menu-open")}
+          role="banner"
+        >
         <Container className="header__inner">
           <Link href="/" className="header__logo" aria-label="На главную">
             <span className="header__logo-name">{siteConfig.name}</span>
@@ -88,7 +89,8 @@ export function Header() {
             </button>
           </div>
         </Container>
-      </header>
+        </header>
+      </div>
 
       <button
         type="button"
