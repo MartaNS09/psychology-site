@@ -13,6 +13,8 @@ export const metadata: Metadata = createSiteMetadata({
   title: "Истории клиентов",
   description:
     "Анонимизированные истории людей, прошедших терапию: тревога, отношения, выгорание. Реальные пути изменений.",
+  path: "/stories",
+  image: "/images/stories/anxiety.webp",
 });
 
 export default function StoriesPage() {

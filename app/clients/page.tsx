@@ -7,6 +7,8 @@ import { createSiteMetadata } from "@/lib/seo/metadata";
 export const metadata: Metadata = createSiteMetadata({
   title: "Для клиентов — терапия и запись",
   description: "Терапия для женщин, мужчин, пар, семей и детей. Стоимость, форматы, запись.",
+  path: "/clients",
+  image: "/images/services/women-therapy.webp",
 });
 
 export default function ClientsPage() {

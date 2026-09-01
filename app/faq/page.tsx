@@ -11,6 +11,8 @@ export const metadata: Metadata = createSiteMetadata({
   title: "Частые вопросы",
   description:
     "Ответы о первой сессии, онлайн-терапии, конфиденциальности, оплате и формате работы с психологом.",
+  path: "/faq",
+  image: "/images/hero-bg.webp",
 });
 
 export default function FaqPage() {

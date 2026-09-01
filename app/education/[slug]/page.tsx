@@ -20,6 +20,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return createSiteMetadata({
     title: program.title,
     description: program.description,
+    path: `/education/${slug}`,
+    image: program.image,
   });
 }
 

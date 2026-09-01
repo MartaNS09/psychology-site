@@ -19,7 +19,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const topic = getTopic(slug);
   if (!topic) return {};
-  return createSiteMetadata({ title: topic.title, description: topic.excerpt });
+  return createSiteMetadata({
+    title: topic.title,
+    description: topic.excerpt,
+    path: `/topics/${slug}`,
+    image: topic.image,
+  });
 }
 
 export default async function TopicDetailPage({ params }: Props) {

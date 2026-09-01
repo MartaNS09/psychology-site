@@ -1,20 +1,48 @@
 import type { Metadata } from "next";
 import { siteConfig } from "./site-config";
 
-export function createSiteMetadata(overrides?: Partial<Metadata>): Metadata {
-  const { title, description, keywords, url, locale, name } = siteConfig;
+export interface PageMetadataOptions {
+  title?: string;
+  description?: string;
+  path?: string;
+  image?: string;
+  imageAlt?: string;
+}
+
+const DEFAULT_OG_IMAGE = "/og-image.jpg";
+
+function resolveCanonical(path = "/") {
+  const base = siteConfig.url.replace(/\/$/, "");
+  if (path === "/") return base;
+  return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
+function resolveOgTitle(title?: string) {
+  return title ? `${title} | ${siteConfig.name}` : siteConfig.title;
+}
+
+export function createPageMetadata(options: PageMetadataOptions = {}): Metadata {
+  const {
+    title,
+    description = siteConfig.description,
+    path = "/",
+    image = DEFAULT_OG_IMAGE,
+    imageAlt,
+  } = options;
+
+  const canonical = resolveCanonical(path);
+  const ogTitle = resolveOgTitle(title);
+  const alt = imageAlt ?? title ?? siteConfig.name;
+  const ogImage = { url: image, width: 1200, height: 630, alt };
 
   return {
-    metadataBase: new URL(url),
-    title: {
-      default: title,
-      template: `%s | ${name}`,
-    },
+    metadataBase: new URL(siteConfig.url),
+    title: title ?? { default: siteConfig.title, template: `%s | ${siteConfig.name}` },
     description,
-    keywords: [...keywords],
+    keywords: [...siteConfig.keywords],
     authors: [{ name: siteConfig.psychologist.name }],
     creator: siteConfig.psychologist.name,
-    publisher: name,
+    publisher: siteConfig.name,
     formatDetection: {
       email: false,
       address: false,
@@ -22,25 +50,18 @@ export function createSiteMetadata(overrides?: Partial<Metadata>): Metadata {
     },
     openGraph: {
       type: "website",
-      locale,
-      url,
-      siteName: name,
-      title,
+      locale: siteConfig.locale,
+      url: canonical,
+      siteName: siteConfig.name,
+      title: ogTitle,
       description,
-      images: [
-        {
-          url: "/og-image.jpg",
-          width: 1200,
-          height: 630,
-          alt: `${siteConfig.psychologist.name} — психолог, терапия и супервизия`,
-        },
-      ],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: ogTitle,
       description,
-      images: ["/og-image.jpg"],
+      images: [image],
     },
     robots: {
       index: true,
@@ -54,22 +75,28 @@ export function createSiteMetadata(overrides?: Partial<Metadata>): Metadata {
       },
     },
     alternates: {
-      canonical: url,
+      canonical,
     },
     category: "health",
     appleWebApp: {
       capable: true,
       statusBarStyle: "default",
-      title: name,
+      title: siteConfig.name,
     },
     icons: {
       icon: [{ url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" }],
       apple: [{ url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" }],
     },
-    ...overrides,
   };
 }
 
+/** @deprecated Используйте createPageMetadata */
+export const createSiteMetadata = createPageMetadata;
+
 export async function generateRootMetadata(): Promise<Metadata> {
-  return createSiteMetadata();
+  return createPageMetadata({
+    path: "/",
+    image: DEFAULT_OG_IMAGE,
+    imageAlt: `${siteConfig.psychologist.name} — психолог, терапия и обучение`,
+  });
 }

@@ -11,6 +11,8 @@ import "@/styles/pages/contact.scss";
 export const metadata: Metadata = createSiteMetadata({
   title: "Контакты и запись",
   description: "Запись на консультацию или курс. Telegram, WhatsApp, форма обратной связи.",
+  path: "/contact",
+  image: "/images/services/couple.webp",
 });
 
 export default function ContactPage() {

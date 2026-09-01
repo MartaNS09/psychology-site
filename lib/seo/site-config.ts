@@ -1,3 +1,9 @@
+function resolveSiteUrl() {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "https://psychology-site-six.vercel.app";
+}
+
 export const siteConfig = {
   name: "Центр психологии и обучения",
   shortName: "Центр психологии",
@@ -14,7 +20,7 @@ export const siteConfig = {
     "семейная терапия",
     "консультация психолога",
   ],
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://psychology-site.ru",
+  url: resolveSiteUrl(),
   locale: "ru_RU",
   psychologist: {
     name: "Имя Фамилия",

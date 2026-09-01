@@ -22,6 +22,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return createSiteMetadata({
     title: service.title,
     description: service.description,
+    path: `/clients/${slug}`,
+    image: service.image,
   });
 }
 

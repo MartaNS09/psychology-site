@@ -21,7 +21,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const story = getStory(slug);
   if (!story) return {};
-  return createSiteMetadata({ title: story.title, description: story.excerpt });
+  return createSiteMetadata({
+    title: story.title,
+    description: story.excerpt,
+    path: `/stories/${slug}`,
+    image: story.image,
+  });
 }
 
 export default async function StoryDetailPage({ params }: Props) {

@@ -13,6 +13,8 @@ export const metadata: Metadata = createSiteMetadata({
   title: "Актуальные темы и статьи",
   description:
     "Статьи о тревоге, отношениях, выгорании, границах и самопознании — полезные материалы от практикующего психолога.",
+  path: "/topics",
+  image: "/images/stories/relationship.webp",
 });
 
 export default function TopicsPage() {

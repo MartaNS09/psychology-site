@@ -12,6 +12,8 @@ import "@/styles/pages/topics.scss";
 export const metadata: Metadata = createSiteMetadata({
   title: "Для коллег — курсы МГИ и супервизия",
   description: "Курсы МГИ 1 и 2 ступень, супервизия, группы. Календарь, регистрация.",
+  path: "/education",
+  image: "/images/education/mgi-stage-1.webp",
 });
 
 export default function EducationPage() {
