@@ -1,0 +1,162 @@
+// ─── Breakpoints ───────────────────────────────────────────────
+// Mobile:  320px – 767px  (default, mobile-first)
+// Tablet:  768px – 1023px
+// Desktop: 1024px+
+
+@mixin mobile {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: 768px) and (max-width: 1023px) {
+    @content;
+  }
+}
+
+@mixin tablet-up {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == sm {
+    @media (min-width: 640px) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (min-width: 768px) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (min-width: 1024px) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (min-width: 1280px) {
+      @content;
+    }
+  }
+}
+
+// ─── Typography ────────────────────────────────────────────────
+@mixin heading-font {
+  font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: 0.05em;
+}
+
+@mixin heading-accent {
+  font-style: italic;
+  font-weight: var(--font-weight-regular);
+  color: var(--color-accent-secondary);
+}
+
+@mixin body-font {
+  font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
+}
+
+@mixin dropcap {
+  &::first-letter {
+    float: left;
+    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-size: 4.2em;
+    font-weight: var(--font-weight-bold);
+    font-style: italic;
+    line-height: 0.78;
+    color: var(--color-accent-secondary);
+    margin-right: 0.12em;
+    margin-top: 0.04em;
+    letter-spacing: 0.02em;
+  }
+}
+
+// ─── Effects ───────────────────────────────────────────────────
+@mixin glass-card {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-glass-border);
+}
+
+@mixin focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@mixin container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin transition($properties...) {
+  transition-property: #{$properties};
+  transition-duration: var(--transition-base);
+  transition-timing-function: ease;
+}
+
+// ─── Animation helpers ─────────────────────────────────────────
+@mixin animate-float-rotate($duration: 24s, $delay: 0s) {
+  animation: float-rotate $duration ease-in-out $delay infinite;
+}
+
+@mixin animate-float-rotate-reverse($duration: 30s, $delay: 0s) {
+  animation: float-rotate-reverse $duration ease-in-out $delay infinite;
+}
+
+@mixin scroll-reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  transition:
+    opacity var(--transition-reveal) var(--ease-reveal),
+    transform var(--transition-reveal) var(--ease-reveal);
+
+  &.reveal_visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@mixin card-hover-lift {
+  transition:
+    transform var(--transition-base) ease,
+    box-shadow var(--transition-base) ease;
+
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-card-hover);
+  }
+}

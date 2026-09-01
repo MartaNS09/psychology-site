@@ -1,0 +1,102 @@
+@use "../mixins" as *;
+
+.stories-page {
+  padding-block: var(--space-3xl);
+
+  &__item {
+    margin-bottom: var(--space-3xl);
+  }
+
+  &__article {
+    display: grid;
+    gap: var(--space-xl);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    background-color: var(--color-bg-secondary);
+    text-decoration: none;
+    color: inherit;
+    transition:
+      box-shadow var(--transition-base),
+      transform var(--transition-base);
+
+    &:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 3px;
+    }
+
+    @include tablet-up {
+      grid-template-columns: 360px 1fr;
+    }
+
+    [data-theme="dark"] & {
+      @include glass-card;
+    }
+  }
+
+  &__media {
+    position: relative;
+    min-height: 260px;
+
+    @include tablet-up {
+      min-height: 100%;
+    }
+  }
+
+  &__image {
+    object-fit: cover;
+  }
+
+  &__category {
+    position: absolute;
+    top: var(--space-md);
+    left: var(--space-md);
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fffcf5;
+    background: rgba(26, 60, 52, 0.8);
+    border-radius: var(--border-radius-full);
+  }
+
+  &__body {
+    padding: var(--space-xl);
+  }
+
+  &__title {
+    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-size: var(--font-size-xl);
+    letter-spacing: 0.04em;
+    margin-bottom: var(--space-md);
+  }
+
+  &__excerpt {
+    font-style: italic;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-lg);
+    line-height: var(--line-height-relaxed);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-lg);
+  }
+
+  &__meta {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+}

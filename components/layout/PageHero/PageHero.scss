@@ -1,0 +1,110 @@
+@use "../../../styles/mixins" as *;
+
+.page-hero {
+  position: relative;
+  padding-block: var(--space-3xl);
+  background-color: var(--color-bg-secondary);
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-border);
+
+  @include tablet-up {
+    padding-block: var(--space-4xl);
+  }
+
+  &__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    .optimized-image {
+      position: absolute;
+      inset: 0;
+    }
+  }
+
+  &__bg-image {
+    object-fit: cover;
+  }
+
+  &__bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(252, 250, 242, 0.92) 0%,
+      rgba(252, 250, 242, 0.85) 50%,
+      rgba(26, 60, 52, 0.25) 100%
+    );
+
+    [data-theme="dark"] & {
+      background: linear-gradient(
+        135deg,
+        rgba(11, 11, 11, 0.92) 0%,
+        rgba(15, 23, 42, 0.88) 100%
+      );
+    }
+  }
+
+  &__bg-fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 140px;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      var(--color-bg-primary) 85%
+    );
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    mask-image: linear-gradient(to bottom, transparent, #000 70%);
+  }
+
+  &__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+  }
+
+  &__eyebrow {
+    display: inline-block;
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent-secondary);
+  }
+
+  &__title {
+    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.05em;
+    color: var(--color-text-primary);
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--space-md);
+
+    @include tablet-up {
+      font-size: var(--font-size-4xl);
+    }
+  }
+
+  &__title_accent {
+    @include heading-accent;
+  }
+
+  &__description {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-secondary);
+    max-width: 620px;
+
+    @include tablet-up {
+      font-size: var(--font-size-lg);
+    }
+  }
+}

@@ -1,0 +1,318 @@
+@use "../../../styles/mixins" as *;
+@use "../../../styles/noise" as *;
+
+.hero {
+  position: relative;
+  padding-block: var(--space-3xl);
+  overflow: hidden;
+  min-height: calc(100dvh - var(--header-height));
+  color: var(--color-text-inverse);
+
+  @include tablet-up {
+    padding-block: var(--space-4xl);
+  }
+
+  @include desktop {
+    min-height: 88vh;
+  }
+
+  &__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  &__video,
+  &__video-fallback {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__video {
+    object-fit: cover;
+  }
+
+  &__video-fallback {
+    position: relative;
+  }
+
+  &__video-poster {
+    object-fit: cover;
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    @include hero-overlay;
+  }
+
+  &__shapes {
+    display: none;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+
+    @include tablet-up {
+      display: block;
+    }
+  }
+
+  &__shape {
+    position: absolute;
+    opacity: 0.35;
+
+    &_circle {
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    &_ring {
+      border-radius: 50%;
+      border: 1px solid rgba(200, 104, 74, 0.45);
+    }
+
+    &_line {
+      width: 2px;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(200, 104, 74, 0.5),
+        transparent
+      );
+      opacity: 0.3;
+    }
+
+    &_1 {
+      top: 12%;
+      right: 8%;
+      width: 280px;
+      height: 280px;
+      @include animate-float-rotate(28s, 0s);
+
+      @include tablet {
+        width: 200px;
+        height: 200px;
+        right: 4%;
+      }
+    }
+
+    &_2 {
+      bottom: 18%;
+      right: 22%;
+      width: 160px;
+      height: 160px;
+      @include animate-float-rotate-reverse(22s, 2s);
+
+      @include tablet {
+        width: 120px;
+        height: 120px;
+        right: 12%;
+      }
+    }
+
+    &_3 {
+      top: 35%;
+      right: 38%;
+      height: 200px;
+      @include animate-float-rotate(32s, 4s);
+
+      @include desktop {
+        right: 42%;
+        height: 280px;
+      }
+    }
+
+    &_4 {
+      top: 8%;
+      right: 55%;
+      width: 80px;
+      height: 80px;
+      @include animate-float-rotate-reverse(26s, 1s);
+
+      @include desktop {
+        display: block;
+      }
+
+      @include tablet {
+        display: none;
+      }
+    }
+  }
+
+  &__inner {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-lg);
+    max-width: 680px;
+
+    @include tablet-up {
+      gap: var(--space-xl);
+      max-width: 720px;
+    }
+  }
+
+  &__profile {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  &__portrait {
+    width: 96px;
+    height: 96px;
+    border-radius: var(--border-radius-full);
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    box-shadow: var(--shadow-md);
+    flex-shrink: 0;
+  }
+
+  &__portrait-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__name {
+    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: #fffcf5;
+    letter-spacing: 0.05em;
+  }
+
+  &__role {
+    font-size: var(--font-size-sm);
+    color: rgba(255, 252, 245, 0.75);
+    letter-spacing: 0.04em;
+  }
+
+  &__trust {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin-top: var(--space-xs);
+  }
+
+  &__trust-item {
+    position: relative;
+    padding-left: var(--space-lg);
+    font-size: var(--font-size-sm);
+    color: rgba(255, 252, 245, 0.85);
+
+    &::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--color-accent-secondary);
+      font-weight: var(--font-weight-bold);
+    }
+  }
+
+  &__badge {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-md);
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #f5f0e6;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: var(--border-radius-full);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+  }
+
+  &__title {
+    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    color: #fffcf5;
+    letter-spacing: 0.05em;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+
+    @include tablet-up {
+      font-size: var(--font-size-4xl);
+    }
+
+    @include desktop {
+      font-size: var(--font-size-5xl);
+    }
+  }
+
+  &__title_accent {
+    font-style: italic;
+    font-weight: var(--font-weight-regular);
+    color: #f0a88a;
+    letter-spacing: 0.05em;
+  }
+
+  &__subtitle {
+    font-size: var(--font-size-base);
+    color: rgba(255, 252, 245, 0.88);
+    line-height: var(--line-height-relaxed);
+    max-width: 560px;
+    letter-spacing: 0.02em;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+
+    @include tablet-up {
+      font-size: var(--font-size-lg);
+    }
+
+    &_dropcap {
+      &::first-letter {
+        float: left;
+        font-family: var(--font-playfair), "Playfair Display", serif;
+        font-size: 4.2em;
+        font-weight: var(--font-weight-bold);
+        font-style: italic;
+        line-height: 0.78;
+        color: #f0a88a;
+        margin-right: 0.12em;
+        margin-top: 0.04em;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+    width: 100%;
+
+    .button {
+      width: 100%;
+      white-space: normal;
+      text-align: center;
+      line-height: var(--line-height-normal);
+    }
+
+    @include tablet-up {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-md);
+      width: auto;
+
+      .button {
+        width: auto;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  &__button_primary {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  }
+}

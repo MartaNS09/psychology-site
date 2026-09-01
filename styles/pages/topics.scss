@@ -1,0 +1,128 @@
+@use "../mixins" as *;
+
+.topics-page {
+  padding-block: var(--space-3xl);
+
+  &__grid {
+    display: grid;
+    gap: var(--space-xl);
+    grid-template-columns: 1fr;
+
+    @include tablet-up {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__article {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    background-color: var(--color-bg-secondary);
+    text-decoration: none;
+    color: inherit;
+    transition:
+      transform var(--transition-base),
+      box-shadow var(--transition-base);
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-card-hover);
+
+      .topics-page__image {
+        transform: scale(1.05);
+      }
+    }
+
+    [data-theme="dark"] & {
+      @include glass-card;
+    }
+  }
+
+  &__media {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+  }
+
+  &__image {
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+  }
+
+  &__body {
+    padding: var(--space-xl);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__category {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent-secondary);
+    margin-bottom: var(--space-sm);
+  }
+
+  &__title {
+    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-size: var(--font-size-lg);
+    letter-spacing: 0.03em;
+    margin-bottom: var(--space-sm);
+    line-height: var(--line-height-tight);
+  }
+
+  &__excerpt {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+    flex: 1;
+    margin-bottom: var(--space-md);
+  }
+
+  &__meta {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+}
+
+.page-section {
+  padding-block: var(--space-3xl);
+
+  &__cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-top: var(--space-2xl);
+  }
+}
+
+.services-page__grid {
+  display: grid;
+  gap: var(--space-xl);
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* 7-я карточка по центу в последнем ряду */
+  & > *:last-child:nth-child(3n + 1):not(:only-child) {
+    @media (min-width: 1024px) {
+      grid-column: 2;
+    }
+  }
+}
+
+.services-page__slide {
+  height: 100%;
+}

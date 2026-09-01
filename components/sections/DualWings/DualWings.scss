@@ -1,0 +1,122 @@
+@use "../../../styles/mixins" as *;
+
+.dual-wings {
+  padding-block: var(--space-3xl);
+  background-color: var(--color-bg-primary);
+
+  @include tablet-up {
+    padding-block: var(--space-4xl);
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  &__title {
+    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-md);
+
+    @include tablet-up {
+      font-size: var(--font-size-3xl);
+    }
+  }
+
+  &__title_accent {
+    @include heading-accent;
+  }
+
+  &__description {
+    max-width: 640px;
+    margin-inline: auto;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  &__grid {
+    display: grid;
+    gap: var(--space-xl);
+    grid-template-columns: 1fr;
+
+    @include tablet-up {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-2xl);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+    color: inherit;
+    min-height: 320px;
+    transition:
+      transform var(--transition-base),
+      box-shadow var(--transition-base),
+      border-color var(--transition-base);
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-card-hover);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 4px;
+    }
+
+    &_clients {
+      background: linear-gradient(160deg, rgba(26, 60, 52, 0.08) 0%, var(--color-bg-secondary) 100%);
+
+      &:hover {
+        border-color: var(--color-accent);
+      }
+    }
+
+    &_education {
+      background: linear-gradient(160deg, rgba(200, 104, 74, 0.08) 0%, var(--color-bg-secondary) 100%);
+
+      &:hover {
+        border-color: var(--color-accent-secondary);
+      }
+    }
+
+    [data-theme="dark"] & {
+      @include glass-card;
+    }
+  }
+
+  &__eyebrow {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent-secondary);
+  }
+
+  &__card-title {
+    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.04em;
+    color: var(--color-text-primary);
+  }
+
+  &__card-text {
+    flex: 1;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  &__cta {
+    align-self: flex-start;
+    margin-top: auto;
+    pointer-events: none;
+  }
+}

@@ -1,0 +1,1 @@
+export { MarqueeTextarea } from "./MarqueeTextarea";

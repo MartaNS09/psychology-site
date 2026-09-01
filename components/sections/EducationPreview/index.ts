@@ -1,0 +1,1 @@
+export { EducationPreview } from "./EducationPreview";

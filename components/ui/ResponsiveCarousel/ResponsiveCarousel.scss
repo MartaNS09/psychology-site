@@ -1,0 +1,114 @@
+@use "../../../styles/mixins" as *;
+
+.responsive-carousel {
+  width: 100%;
+  margin-inline: calc(var(--container-padding) * -1);
+  padding-inline: var(--container-padding);
+
+  &__hint {
+    display: block;
+    text-align: center;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-sm);
+  }
+
+  &__viewport {
+    overflow: hidden;
+    width: 100%;
+    cursor: grab;
+    -webkit-overflow-scrolling: touch;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  &__container {
+    display: flex;
+    margin-left: calc(var(--space-sm) * -1);
+  }
+
+  &__slide {
+    flex: 0 0 clamp(260px, 84vw, 340px);
+    width: clamp(260px, 84vw, 340px);
+    min-width: 0;
+    padding-left: var(--space-sm);
+    -webkit-tap-highlight-color: transparent;
+
+    > * {
+      width: 100%;
+      min-width: 0;
+    }
+
+    @include tablet-up {
+      flex-basis: clamp(300px, 48vw, 380px);
+      width: clamp(300px, 48vw, 380px);
+    }
+
+    /* Карточки блога — вертикальный компактный layout в карусели */
+    .topics-preview__card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      padding: var(--space-md);
+      height: auto;
+    }
+
+    .topics-preview__media {
+      width: 100%;
+      min-height: clamp(120px, 32vw, 160px);
+      aspect-ratio: 16 / 10;
+    }
+
+    .topics-preview__body {
+      width: 100%;
+    }
+
+    /* Истории */
+    .stories-preview__card {
+      height: auto;
+    }
+
+    .stories-preview__media {
+      height: clamp(120px, 32vw, 160px);
+    }
+
+    /* ImageCard в карусели */
+    .image-card {
+      height: 100%;
+    }
+  }
+
+  &__dots {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin-top: var(--space-md);
+  }
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--border-radius-full);
+    border: none;
+    background-color: var(--color-border-strong);
+    padding: 0;
+    transition:
+      background-color var(--transition-base),
+      transform var(--transition-base);
+
+    &_active {
+      background-color: var(--color-accent);
+      transform: scale(1.25);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+  }
+}

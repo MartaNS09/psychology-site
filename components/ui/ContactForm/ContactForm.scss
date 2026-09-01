@@ -1,0 +1,84 @@
+@use "../../../styles/mixins" as *;
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+
+    label {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-primary);
+    }
+
+    input,
+    select,
+    textarea {
+      padding: var(--space-md);
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius-md);
+      background-color: var(--color-bg-primary);
+      color: var(--color-text-primary);
+      font: inherit;
+      transition:
+        border-color var(--transition-base),
+        box-shadow var(--transition-base);
+
+      &:hover {
+        border-color: var(--color-border-strong);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-accent);
+        box-shadow: 0 0 0 3px rgba(26, 60, 52, 0.15);
+      }
+    }
+  }
+
+  &__submit {
+    width: 100%;
+
+    @include tablet-up {
+      width: auto;
+      align-self: flex-start;
+    }
+  }
+
+  &__status {
+    padding: var(--space-md);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+
+    &_success {
+      background-color: rgba(26, 60, 52, 0.1);
+      color: var(--color-accent);
+      border: 1px solid var(--color-accent);
+    }
+
+    &_error {
+      background-color: rgba(200, 104, 74, 0.1);
+      color: var(--color-error);
+      border: 1px solid var(--color-accent-secondary);
+    }
+  }
+
+  &__quick-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+
+    a {
+      color: var(--color-accent);
+      font-weight: var(--font-weight-semibold);
+    }
+  }
+}

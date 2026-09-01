@@ -1,0 +1,113 @@
+@use "../../../styles/mixins" as *;
+
+.faq-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+
+  &__item {
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    background-color: var(--color-bg-secondary);
+    overflow: hidden;
+    transition:
+      border-color var(--transition-base),
+      box-shadow var(--transition-base);
+
+    &:hover {
+      border-color: var(--color-accent-secondary);
+    }
+
+    &:focus-within {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(26, 60, 52, 0.12);
+    }
+
+    [data-theme="dark"] & {
+      @include glass-card;
+    }
+  }
+
+  &__heading {
+    margin: 0;
+  }
+
+  &__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    width: 100%;
+    padding: var(--space-lg) var(--space-xl);
+    text-align: left;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background-color var(--transition-base);
+
+    &:hover {
+      background-color: var(--color-accent-light);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: -2px;
+    }
+
+    &_open {
+      background-color: var(--color-accent-light);
+    }
+  }
+
+  &__question {
+    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.03em;
+    color: var(--color-text-primary);
+
+    @include tablet-up {
+      font-size: var(--font-size-lg);
+    }
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius-full);
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-accent);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    transition:
+      transform var(--transition-base),
+      background-color var(--transition-base);
+  }
+
+  &__trigger_open &__icon {
+    transform: rotate(180deg);
+    background-color: var(--color-accent);
+    color: var(--color-text-inverse);
+  }
+
+  &__panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-slow) ease;
+
+    &_open {
+      max-height: 400px;
+    }
+  }
+
+  &__answer {
+    padding: 0 var(--space-xl) var(--space-lg);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-secondary);
+  }
+}

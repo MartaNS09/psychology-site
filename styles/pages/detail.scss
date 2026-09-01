@@ -1,0 +1,281 @@
+@use "../mixins" as *;
+
+.detail-page {
+  &__hero {
+    position: relative;
+    min-height: 360px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    margin-bottom: 0;
+
+    @include tablet-up {
+      min-height: 420px;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 120px;
+      z-index: 2;
+      pointer-events: none;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--color-bg-primary) 90%
+      );
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      mask-image: linear-gradient(to bottom, transparent, #000 65%);
+    }
+  }
+
+  &__hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(11, 11, 11, 0.92) 0%,
+      rgba(11, 11, 11, 0.45) 55%,
+      rgba(11, 11, 11, 0.15) 100%
+    );
+  }
+
+  &__hero-image {
+    object-fit: cover;
+  }
+
+  &__hero-content {
+    position: relative;
+    z-index: 3;
+    padding-block: var(--space-3xl);
+    max-width: 720px;
+  }
+
+  &__back {
+    display: inline-block;
+    margin-bottom: var(--space-md);
+    color: rgba(255, 252, 245, 0.8);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    transition: color var(--transition-base);
+
+    &:hover {
+      color: #f0a88a;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #f0a88a;
+      outline-offset: 3px;
+    }
+  }
+
+  &__subtitle {
+    font-size: var(--font-size-sm);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #f0a88a;
+    margin-bottom: var(--space-sm);
+  }
+
+  &__title {
+    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.05em;
+    color: #fffcf5;
+    margin-bottom: var(--space-md);
+    line-height: var(--line-height-tight);
+
+    @include tablet-up {
+      font-size: var(--font-size-4xl);
+    }
+  }
+
+  &__price {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: #f0a88a;
+    margin-bottom: var(--space-md);
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+  }
+
+  &__meta-item {
+    dt {
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: rgba(255, 252, 245, 0.6);
+    }
+
+    dd {
+      font-weight: var(--font-weight-semibold);
+      color: #fffcf5;
+    }
+  }
+
+  &__layout {
+    display: grid;
+    gap: var(--space-2xl);
+    padding-block: var(--space-3xl);
+
+    @include desktop {
+      grid-template-columns: 1fr 380px;
+      gap: var(--space-3xl);
+    }
+  }
+
+  &__content {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-secondary);
+
+    p {
+      margin-bottom: var(--space-lg);
+    }
+
+    ul {
+      margin-bottom: var(--space-lg);
+      padding-left: var(--space-lg);
+
+      li {
+        margin-bottom: var(--space-sm);
+        list-style: disc;
+      }
+    }
+  }
+
+  &__sidebar-card {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-lg));
+    padding: var(--space-xl);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    background-color: var(--color-bg-secondary);
+
+    [data-theme="dark"] & {
+      @include glass-card;
+    }
+  }
+
+  &__sidebar-title {
+    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  &__sidebar-text {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+  }
+
+  &__messengers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+
+  &__cta-link {
+    display: inline-block;
+    margin-bottom: var(--space-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-accent);
+  }
+
+  &__related {
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--color-border);
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      margin: var(--space-md) 0 var(--space-lg);
+    }
+
+    a {
+      color: var(--color-accent);
+      font-weight: var(--font-weight-medium);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__related-title {
+    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-size: var(--font-size-xl);
+    letter-spacing: 0.04em;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin: var(--space-md) 0 var(--space-xl);
+
+    li {
+      position: relative;
+      padding-left: var(--space-lg);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-relaxed);
+
+      &::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--color-accent-secondary);
+      }
+    }
+  }
+
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    margin: var(--space-md) 0 var(--space-xl);
+    counter-reset: step;
+
+    li {
+      padding-left: var(--space-xl);
+      position: relative;
+      counter-increment: step;
+
+      &::before {
+        content: counter(step);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1.75rem;
+        height: 1.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--border-radius-full);
+        background-color: var(--color-accent);
+        color: #fffcf5;
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-bold);
+      }
+
+      p {
+        margin-top: var(--space-xs);
+        color: var(--color-text-secondary);
+        line-height: var(--line-height-relaxed);
+      }
+    }
+  }
+}
