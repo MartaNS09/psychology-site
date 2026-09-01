@@ -9,9 +9,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 const SESSION_KEY = "pwa-install-session";
-const DISMISS_KEY = "pwa-install-dismissed-until";
-const DISMISS_DAYS = 14;
-const SHOW_DELAY_MS = 8000;
+const SHOW_DELAY_MS = 5 * 60 * 1000;
 
 function isStandalone() {
   return (
@@ -23,16 +21,6 @@ function isStandalone() {
 
 function isIos() {
   return /iphone|ipad|ipod/i.test(navigator.userAgent);
-}
-
-function isDismissedLongTerm() {
-  try {
-    const until = localStorage.getItem(DISMISS_KEY);
-    if (!until) return false;
-    return Date.now() < Number(until);
-  } catch {
-    return false;
-  }
 }
 
 function isHandledThisSession() {
@@ -51,18 +39,8 @@ function markSessionHandled() {
   }
 }
 
-function markDismissedLongTerm() {
-  try {
-    const until = Date.now() + DISMISS_DAYS * 24 * 60 * 60 * 1000;
-    localStorage.setItem(DISMISS_KEY, String(until));
-    markSessionHandled();
-  } catch {
-    /* ignore */
-  }
-}
-
 function shouldShowPrompt() {
-  return !isStandalone() && !isDismissedLongTerm() && !isHandledThisSession();
+  return !isStandalone() && !isHandledThisSession();
 }
 
 export function PwaInstallPrompt() {
@@ -76,7 +54,6 @@ export function PwaInstallPrompt() {
     const timer = window.setTimeout(() => {
       if (!shouldShowPrompt()) return;
       if (isIos()) setIosHint(true);
-      markSessionHandled();
       setVisible(true);
     }, SHOW_DELAY_MS);
 
@@ -85,64 +62,65 @@ export function PwaInstallPrompt() {
       e.preventDefault();
       setDeferred(e as BeforeInstallPromptEvent);
       setIosHint(false);
-      markSessionHandled();
-      setVisible(true);
-      window.clearTimeout(timer);
+      clearTimeout(timer);
     };
 
     window.addEventListener("beforeinstallprompt", onBip);
     return () => {
-      window.clearTimeout(timer);
+      clearTimeout(timer);
       window.removeEventListener("beforeinstallprompt", onBip);
     };
   }, []);
 
   const dismiss = useCallback(() => {
     setVisible(false);
-    markDismissedLongTerm();
+    markSessionHandled();
   }, []);
 
   const install = useCallback(async () => {
-    if (!deferred) return;
-    await deferred.prompt();
-    const { outcome } = await deferred.userChoice;
-    setDeferred(null);
-    setVisible(false);
-    markDismissedLongTerm();
-    if (outcome === "accepted") {
-      /* установлено — больше не показываем */
+    markSessionHandled();
+    if (deferred) {
+      await deferred.prompt();
+      const { outcome } = await deferred.userChoice;
+      setDeferred(null);
+      setVisible(false);
+      if (outcome === "accepted") return;
     }
+    setVisible(false);
   }, [deferred]);
 
   if (!visible) return null;
 
+  const canNativeInstall = Boolean(deferred);
+
   return (
-    <div className="pwa-install" role="dialog" aria-label="Установить приложение">
-      <div className="pwa-install__card">
-        <button
-          type="button"
-          className="pwa-install__close"
-          onClick={dismiss}
-          aria-label="Закрыть"
-        >
-          ×
-        </button>
-        <p className="pwa-install__title">Установить приложение</p>
+    <div className="pwa-install" role="presentation">
+      <button
+        type="button"
+        className="pwa-install__backdrop"
+        aria-label="Закрыть окно установки"
+        onClick={dismiss}
+      />
+      <div className="pwa-install__dialog" role="dialog" aria-modal="true" aria-labelledby="pwa-title">
+        <div className="pwa-install__icon" aria-hidden="true">
+          📱
+        </div>
+        <h2 id="pwa-title" className="pwa-install__title">
+          Установить приложение
+        </h2>
         <p className="pwa-install__text">
           {iosHint
-            ? "Safari → «Поделиться» → «На экран Домой»."
-            : deferred
-              ? "Быстрый доступ к записи и контактам — одним нажатием."
-              : "Chrome → меню (⋮) → «Установить приложение»."}
+            ? "Добавьте сайт на главный экран: Safari → «Поделиться» → «На экран Домой»."
+            : canNativeInstall
+              ? "Быстрый доступ к записи, контактам и материалам — одним нажатием с телефона."
+              : "В Chrome: меню (⋮) → «Установить приложение» или «Добавить на главный экран»."}
         </p>
         <div className="pwa-install__actions">
-          {deferred && (
-            <button type="button" className="button button_primary button_small" onClick={install}>
-              <span className="button__label">Установить</span>
-            </button>
-          )}
-          <button type="button" className="pwa-install__dismiss" onClick={dismiss}>
-            Не сейчас
+          <button type="button" className="button button_primary button_small pwa-install__btn" onClick={install}>
+            <span className="button__label">Установить</span>
+          </button>
+          <button type="button" className="button button_secondary button_small pwa-install__btn" onClick={dismiss}>
+            <span className="button__label">Не сейчас</span>
           </button>
         </div>
       </div>

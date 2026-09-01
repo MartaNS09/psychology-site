@@ -4,6 +4,7 @@ import { PwaRegister } from "@/components/PwaRegister";
 import { Header } from "@/components/layout/Header";
 import { AriaLiveWelcome } from "@/components/a11y/AriaLiveWelcome";
 import { ChatWidget } from "@/components/ui/ChatWidget";
+import { AmbientSound } from "@/components/ui/AmbientSound/AmbientSound";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { generateRootMetadata } from "@/lib/seo/metadata";
 import "@/styles/globals.scss";
@@ -69,6 +70,7 @@ export default function RootLayout({
             <div className="site-shell__body">{children}</div>
           </div>
           <PwaInstallPrompt />
+          <AmbientSound />
           <ChatWidget />
         </ThemeProvider>
       </body>

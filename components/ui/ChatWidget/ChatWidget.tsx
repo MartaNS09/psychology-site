@@ -5,23 +5,38 @@ import { siteConfig } from "@/lib/seo/site-config";
 import { ContactForm } from "@/components/ui/ContactForm";
 import "./ChatWidget.scss";
 
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-}
+const NUDGE_DURATION_MS = 30_000;
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [panelDismissed, setPanelDismissed] = useState(false);
+  const [showNudge, setShowNudge] = useState(false);
 
   useEffect(() => {
     setPanelDismissed(sessionStorage.getItem("chat-panel-dismissed") === "1");
   }, []);
 
+  useEffect(() => {
+    if (open || panelDismissed) {
+      setShowNudge(false);
+      return;
+    }
+
+    setShowNudge(true);
+    const timer = window.setTimeout(() => setShowNudge(false), NUDGE_DURATION_MS);
+    return () => window.clearTimeout(timer);
+  }, [open, panelDismissed]);
+
   function handleClosePanel() {
     setOpen(false);
     setPanelDismissed(true);
+    setShowNudge(false);
     sessionStorage.setItem("chat-panel-dismissed", "1");
+  }
+
+  function handleOpen() {
+    setOpen(true);
+    setShowNudge(false);
   }
 
   return (
@@ -70,11 +85,11 @@ export function ChatWidget() {
         </div>
       )}
 
-      {!open && !panelDismissed && (
+      {!open && !panelDismissed && showNudge && (
         <button
           type="button"
           className="chat-widget__nudge"
-          onClick={() => setOpen(true)}
+          onClick={handleOpen}
           aria-label="Открыть окно связи с психологом"
         >
           Есть вопрос? Напишите нам
@@ -84,7 +99,7 @@ export function ChatWidget() {
       <button
         type="button"
         className="chat-widget__toggle"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => (open ? setOpen(false) : handleOpen())}
         aria-label={open ? "Свернуть чат" : "Открыть чат"}
         aria-expanded={open}
       >

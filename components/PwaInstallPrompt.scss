@@ -1,91 +1,144 @@
 .pwa-install {
   position: fixed;
-  left: 50%;
-  bottom: calc(88px + env(safe-area-inset-bottom, 0px));
-  z-index: 480;
-  transform: translateX(-50%);
-  width: min(420px, calc(100vw - 2rem));
-  pointer-events: none;
+  inset: 0;
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  padding-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom, 0px));
 
-  @media (min-width: 1024px) {
-    bottom: calc(var(--space-lg) + env(safe-area-inset-bottom, 0px));
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    border: none;
+    padding: 0;
+    background: rgba(11, 11, 11, 0.52);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    cursor: pointer;
+    animation: pwaFadeIn 0.35s ease-out;
   }
 
-  &__card {
+  &__dialog {
     position: relative;
-    pointer-events: auto;
-    width: 100%;
-    padding: var(--space-md) var(--space-lg);
-    padding-top: var(--space-xl);
+    z-index: 1;
+    width: min(400px, 100%);
+    padding: var(--space-xl) var(--space-lg) var(--space-lg);
     border-radius: var(--border-radius-lg);
     border: 1px solid var(--color-border);
-    background-color: var(--color-bg-secondary);
+    background: linear-gradient(165deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
     box-shadow: var(--shadow-lg);
-    animation: pwaSlideUp 0.4s ease-out;
+    text-align: center;
+    animation: pwaModalIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  &__close {
-    position: absolute;
-    top: var(--space-sm);
-    right: var(--space-sm);
-    width: 32px;
-    height: 32px;
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: var(--space-md);
     border-radius: var(--border-radius-full);
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-primary);
-    font-size: var(--font-size-lg);
-    line-height: 1;
-    cursor: pointer;
-    color: var(--color-text-secondary);
+    background: var(--color-accent-light);
+    font-size: 1.75rem;
   }
 
   &__title {
     font-family: var(--font-playfair), "Playfair Display", serif;
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-xl);
     font-weight: var(--font-weight-bold);
-    margin-bottom: var(--space-xs);
     color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
   }
 
   &__text {
     font-size: var(--font-size-sm);
     line-height: var(--line-height-relaxed);
     color: var(--color-text-secondary);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-lg);
   }
 
   &__actions {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    flex-direction: column;
     gap: var(--space-sm);
+
+    @media (min-width: 480px) {
+      flex-direction: row;
+      justify-content: center;
+    }
   }
 
-  &__dismiss {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: 2px;
+  &__btn {
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+    justify-content: center;
+    position: relative;
+    isolation: isolate;
+
+    .button__label {
+      position: relative;
+      z-index: 2;
+    }
+
+    &.button_primary {
+      background: linear-gradient(135deg, #1a3c34 0%, #0f2922 100%) !important;
+      color: #fffcf5 !important;
+      border: 2px solid #1a3c34 !important;
+
+      .button__label {
+        color: #fffcf5 !important;
+      }
+
+      &::before {
+        opacity: 0 !important;
+      }
+    }
+
+    &.button_secondary {
+      background: var(--color-bg-primary) !important;
+      color: #1a3c34 !important;
+      border: 2px solid #1a3c34 !important;
+
+      .button__label {
+        color: #1a3c34 !important;
+      }
+
+      &::before {
+        opacity: 0 !important;
+      }
+    }
   }
 }
 
-@keyframes pwaSlideUp {
+@keyframes pwaFadeIn {
   from {
     opacity: 0;
-    transform: translateY(12px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+  }
+}
+
+@keyframes pwaModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pwa-install__card {
+  .pwa-install__backdrop,
+  .pwa-install__dialog {
     animation: none;
   }
 }

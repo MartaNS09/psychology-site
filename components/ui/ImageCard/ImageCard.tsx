@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { CardLink } from "@/components/ui/CardLink/CardLink";
 import { OptimizedImage } from "@/components/ui/OptimizedImage";
 import { cn } from "@/utils";
 import "./ImageCard.scss";
@@ -68,7 +71,7 @@ export function ImageCard({
   const cardClass = cn(
     "image-card",
     variant === "full" && "image-card_full",
-    href && !inCarousel && "image-card_interactive",
+    href && "image-card_interactive",
     inCarousel && "image-card_carousel",
     className
   );
@@ -77,12 +80,9 @@ export function ImageCard({
 
   if (href && inCarousel) {
     return (
-      <article className={cardClass}>
+      <CardLink href={href} className={cardClass} aria-label={label}>
         {content}
-        <Link href={href} className="image-card__more" aria-label={label}>
-          Подробнее →
-        </Link>
-      </article>
+      </CardLink>
     );
   }
 

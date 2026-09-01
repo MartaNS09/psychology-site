@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { topicsData } from "@/lib/content/topics";
 import { Container } from "@/components/ui/Container";
+import { CardLink } from "@/components/ui/CardLink/CardLink";
 import { OptimizedImage } from "@/components/ui/OptimizedImage";
 import { ResponsiveCarousel } from "@/components/ui/ResponsiveCarousel";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -10,7 +11,12 @@ import "./TopicsPreview.scss";
 
 export function TopicsPreview() {
   const cards = topicsData.map((topic) => (
-    <article key={topic.slug} className="topics-preview__card">
+    <CardLink
+      key={topic.slug}
+      href={`/topics/${topic.slug}`}
+      className="topics-preview__card"
+      aria-label={`Читать статью: ${topic.title}`}
+    >
       <div className="topics-preview__media">
         <OptimizedImage
           src={topic.image}
@@ -25,11 +31,9 @@ export function TopicsPreview() {
         <span className="topics-preview__category">{topic.category}</span>
         <h3 className="topics-preview__card-title">{topic.title}</h3>
         <p className="topics-preview__excerpt">{topic.excerpt}</p>
-        <Link href={`/topics/${topic.slug}`} className="topics-preview__more">
-          {topic.readTime} · Читать →
-        </Link>
+        <span className="topics-preview__more">{topic.readTime} · Читать →</span>
       </div>
-    </article>
+    </CardLink>
   ));
 
   return (

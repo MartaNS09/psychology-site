@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { storiesData } from "@/lib/content/stories";
 import { Container } from "@/components/ui/Container";
+import { CardLink } from "@/components/ui/CardLink/CardLink";
 import { OptimizedImage } from "@/components/ui/OptimizedImage";
 import { ResponsiveCarousel } from "@/components/ui/ResponsiveCarousel";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -16,7 +17,12 @@ export function StoriesPreview({ limit = 3 }: StoriesPreviewProps) {
   const items = storiesData.slice(0, limit);
 
   const cards = items.map((story) => (
-    <article key={story.slug} className="stories-preview__card">
+    <CardLink
+      key={story.slug}
+      href={`/stories/${story.slug}`}
+      className="stories-preview__card"
+      aria-label={`Читать историю: ${story.title}`}
+    >
       <div className="stories-preview__media">
         <OptimizedImage
           src={story.image}
@@ -32,15 +38,9 @@ export function StoriesPreview({ limit = 3 }: StoriesPreviewProps) {
       <div className="stories-preview__body">
         <h3 className="stories-preview__card-title">{story.title}</h3>
         <p className="stories-preview__excerpt">{story.excerpt}</p>
-        <Link
-          href={`/stories/${story.slug}`}
-          className="stories-preview__more"
-          aria-label={`Читать историю: ${story.title}`}
-        >
-          {story.readTime} · Читать →
-        </Link>
+        <span className="stories-preview__more">{story.readTime} · Читать →</span>
       </div>
-    </article>
+    </CardLink>
   ));
 
   return (

@@ -16,6 +16,7 @@ html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   overflow-x: clip;
+  background-color: var(--color-bg-primary);
 }
 
 body {
@@ -38,6 +39,10 @@ body {
   flex: 1;
   min-height: 100dvh;
   width: 100%;
+
+  @media (max-width: 767px) {
+    padding-top: calc(var(--header-height) + env(safe-area-inset-top, 0px));
+  }
 }
 
 .site-shell__body {
