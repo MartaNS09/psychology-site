@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { mainNav } from "@/lib/content/navigation";
 import { siteConfig } from "@/lib/seo/site-config";
 import { Container } from "@/components/ui/Container";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { useIosFixedHeader } from "@/hooks/useIosFixedHeader";
+import { useAutoHideHeader } from "@/hooks/useAutoHideHeader";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/utils";
 import "./Header.scss";
 
@@ -15,10 +16,8 @@ export function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const anchorRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLElement>(null);
-
-  useIosFixedHeader(headerRef, anchorRef);
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  const headerVisible = useAutoHideHeader(isMobile, menuOpen);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -40,10 +39,14 @@ export function Header() {
 
   return (
     <>
-      <div className="header-anchor" ref={anchorRef}>
+      <div className="header-anchor" aria-hidden="true">
         <header
-          ref={headerRef}
-          className={cn("header", scrolled && "header_scrolled", menuOpen && "header_menu-open")}
+          className={cn(
+            "header",
+            scrolled && "header_scrolled",
+            menuOpen && "header_menu-open",
+            isMobile && !headerVisible && "header_hidden"
+          )}
           role="banner"
         >
           <Container className="header__inner">

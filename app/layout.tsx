@@ -56,7 +56,7 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning>
         <Script id="theme-init" strategy="beforeInteractive">
-          {`(function(){try{var e=document.documentElement,t=localStorage.getItem("theme");if(/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1))e.classList.add("is-ios");if(t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches))e.setAttribute("data-theme","dark");else e.setAttribute("data-theme","light")}catch(e){}})();`}
+          {`(function(){try{var e=document.documentElement,t=localStorage.getItem("theme");if(t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches))e.setAttribute("data-theme","dark");else e.setAttribute("data-theme","light")}catch(e){}})();`}
         </Script>
         <ThemeProvider>
           <Header />
