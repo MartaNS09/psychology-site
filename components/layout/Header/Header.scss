@@ -2,9 +2,14 @@
 
 .header-anchor {
   flex-shrink: 0;
+  z-index: var(--z-sticky);
 
   @include mobile {
-    height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding-top: env(safe-area-inset-top, 0px);
+    background-color: var(--color-bg-primary);
   }
 }
 
@@ -24,22 +29,14 @@
     box-shadow var(--transition-base);
 
   @include mobile {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 1000;
-    height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
-    padding-top: env(safe-area-inset-top, 0px);
-    box-sizing: border-box;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    transform: translate3d(0, 0, 0);
-    background-color: rgba(252, 250, 242, 0.98);
+    height: var(--header-height);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: var(--color-bg-primary);
+    border-bottom-color: var(--color-border);
 
     [data-theme="dark"] & {
-      background-color: rgba(11, 11, 11, 0.96);
+      background-color: var(--color-bg-secondary);
     }
   }
 
@@ -58,6 +55,10 @@
     justify-content: space-between;
     height: 100%;
     gap: var(--space-sm);
+
+    @include mobile {
+      gap: var(--space-xs);
+    }
   }
 
   &__logo {
@@ -70,6 +71,12 @@
     margin: calc(var(--space-xs) * -1) calc(var(--space-sm) * -1);
     border-radius: var(--border-radius-md);
     border: 1px solid transparent;
+
+    @include mobile {
+      flex: 1 1 auto;
+      padding: var(--space-xs);
+      margin: 0;
+    }
     transition:
       transform 0.45s ease,
       background-color 0.45s ease,
@@ -119,18 +126,24 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    background-image: linear-gradient(currentColor, currentColor);
-    background-position: 0 100%;
-    background-repeat: no-repeat;
-    background-size: 0 1px;
-    padding-bottom: 2px;
-    transition:
-      color 0.45s ease,
-      letter-spacing 0.45s ease,
-      background-size 0.45s ease;
 
-    .header__logo:hover & {
-      background-size: 100% 1px;
+    @include mobile {
+      font-size: var(--font-size-sm);
+      letter-spacing: 0.02em;
+    }
+
+    &_full {
+      @include mobile {
+        display: none;
+      }
+    }
+
+    &_short {
+      display: none;
+
+      @include mobile {
+        display: block;
+      }
     }
 
     @include tablet-up {
@@ -219,6 +232,10 @@
     padding: var(--space-xs) var(--space-sm);
     font-size: var(--font-size-xs);
     min-width: 0;
+
+    @include mobile {
+      display: none;
+    }
 
     .button__label {
       position: relative;
@@ -414,5 +431,30 @@
     text-decoration: none;
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-sm);
+  }
+}
+
+html.is-ios .header {
+  @media (max-width: 767px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    padding-top: env(safe-area-inset-top, 0px);
+    height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
+    box-sizing: border-box;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+html.is-ios .header-anchor {
+  @media (max-width: 767px) {
+    position: relative;
+    top: auto;
+    padding-top: 0;
+    background: transparent;
   }
 }
