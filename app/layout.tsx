@@ -60,13 +60,13 @@ export default function RootLayout({
           {`(function(){try{var e=document.documentElement,t=localStorage.getItem("theme");if(t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches))e.setAttribute("data-theme","dark");else e.setAttribute("data-theme","light")}catch(e){}})();`}
         </Script>
         <ThemeProvider>
+          <Header />
           <div className="site-shell">
             <PwaRegister />
             <AriaLiveWelcome />
             <a href="#main-content" className="skip-link">
               Перейти к основному содержимому
             </a>
-            <Header />
             <div className="site-shell__body">{children}</div>
           </div>
           <PwaInstallPrompt />

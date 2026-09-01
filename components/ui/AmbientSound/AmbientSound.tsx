@@ -5,96 +5,84 @@ import "./AmbientSound.scss";
 
 const STORAGE_KEY = "ambient-sound-enabled";
 
-function createOcean(ctx: AudioContext, dest: AudioNode) {
-  const len = ctx.sampleRate * 2;
-  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
-  const ch = buf.getChannelData(0);
-  for (let i = 0; i < len; i++) ch[i] = Math.random() * 2 - 1;
+/** Пентатоника — мягкая мелодия без лицензионных треков (генерируется в браузере). */
+const MELODY_NOTES = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25];
 
-  const src = ctx.createBufferSource();
-  src.buffer = buf;
-  src.loop = true;
-
-  const filter = ctx.createBiquadFilter();
-  filter.type = "lowpass";
-  filter.frequency.value = 520;
-
-  const gain = ctx.createGain();
-  gain.gain.value = 0.045;
-
-  src.connect(filter);
-  filter.connect(gain);
-  gain.connect(dest);
-  src.start();
-  return () => src.stop();
+function playSoftNote(ctx: AudioContext, dest: AudioNode, freq: number, start: number, duration = 1.4) {
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  osc.type = "sine";
+  osc.frequency.value = freq;
+  g.gain.setValueAtTime(0, start);
+  g.gain.linearRampToValueAtTime(0.032, start + 0.06);
+  g.gain.exponentialRampToValueAtTime(0.001, start + duration);
+  osc.connect(g);
+  g.connect(dest);
+  osc.start(start);
+  osc.stop(start + duration + 0.05);
 }
 
-function createPad(ctx: AudioContext, dest: AudioNode) {
-  const notes = [261.63, 329.63, 392, 493.88, 587.33];
-  const oscs = notes.map((freq) => {
-    const osc = ctx.createOscillator();
-    const g = ctx.createGain();
-    osc.type = "triangle";
-    osc.frequency.value = freq;
-    g.gain.value = 0.018;
-    osc.connect(g);
-    g.connect(dest);
-    osc.start();
-    return osc;
-  });
+function createMelody(ctx: AudioContext, dest: AudioNode) {
+  const bus = ctx.createGain();
+  bus.gain.value = 0.85;
+  bus.connect(dest);
 
-  const lfo = ctx.createOscillator();
-  const lfoG = ctx.createGain();
-  lfo.frequency.value = 0.06;
-  lfoG.gain.value = 0.008;
-  lfo.connect(lfoG);
-  lfo.connect(dest);
-  lfo.start();
-
-  return () => {
-    lfo.stop();
-    oscs.forEach((o) => o.stop());
+  const pickNotes = () => {
+    const count = 2 + Math.floor(Math.random() * 2);
+    const pool = [...MELODY_NOTES];
+    const picked: number[] = [];
+    for (let i = 0; i < count; i++) {
+      const idx = Math.floor(Math.random() * pool.length);
+      picked.push(pool.splice(idx, 1)[0]);
+    }
+    return picked;
   };
+
+  const phrase = () => {
+    const t = ctx.currentTime;
+    pickNotes().forEach((freq, i) => playSoftNote(ctx, bus, freq, t + i * 0.42));
+  };
+
+  phrase();
+  const timer = window.setInterval(phrase, 5200 + Math.random() * 2800);
+  return () => window.clearInterval(timer);
 }
 
 function createBirds(ctx: AudioContext, dest: AudioNode) {
-  const timers: ReturnType<typeof setInterval>[] = [];
+  const timers: number[] = [];
 
   const chirp = () => {
+    const t = ctx.currentTime;
     const osc = ctx.createOscillator();
     const g = ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(2800, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(4200, ctx.currentTime + 0.08);
-    osc.frequency.exponentialRampToValueAtTime(2400, ctx.currentTime + 0.2);
-    g.gain.setValueAtTime(0, ctx.currentTime);
-    g.gain.linearRampToValueAtTime(0.025, ctx.currentTime + 0.03);
-    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+    osc.frequency.setValueAtTime(2200, t);
+    osc.frequency.exponentialRampToValueAtTime(3400, t + 0.07);
+    osc.frequency.exponentialRampToValueAtTime(2100, t + 0.22);
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.012, t + 0.04);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
     osc.connect(g);
     g.connect(dest);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.4);
+    osc.start(t);
+    osc.stop(t + 0.42);
   };
 
-  timers.push(setInterval(chirp, 4500 + Math.random() * 3000));
-  timers.push(setInterval(chirp, 7000 + Math.random() * 4000));
-
-  return () => timers.forEach(clearInterval);
+  timers.push(window.setInterval(chirp, 9000 + Math.random() * 7000));
+  return () => timers.forEach((id) => window.clearInterval(id));
 }
 
 function createAmbient(ctx: AudioContext) {
   const master = ctx.createGain();
-  master.gain.value = 0.55;
+  master.gain.value = 0.5;
   master.connect(ctx.destination);
 
-  const stopOcean = createOcean(ctx, master);
-  const stopPad = createPad(ctx, master);
+  const stopMelody = createMelody(ctx, master);
   const stopBirds = createBirds(ctx, master);
 
   return () => {
     stopBirds();
-    stopPad();
-    stopOcean();
+    stopMelody();
     master.disconnect();
   };
 }
@@ -155,7 +143,7 @@ export function AmbientSound() {
       type="button"
       className={`ambient-sound${enabled ? " ambient-sound_on" : ""}`}
       onClick={toggle}
-      aria-label={enabled ? "Выключить атмосферу" : "Включить атмосферу: классика, океан, птицы"}
+      aria-label={enabled ? "Выключить атмосферу" : "Включить лёгкую мелодию и звуки природы"}
       aria-pressed={enabled}
       title={enabled ? "Выключить звук" : "Включить атмосферу"}
     >

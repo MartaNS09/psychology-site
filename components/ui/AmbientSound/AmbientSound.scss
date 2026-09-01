@@ -1,6 +1,6 @@
 .ambient-sound {
   position: fixed;
-  right: calc(var(--space-md) + env(safe-area-inset-right, 0px));
+  left: calc(var(--space-md) + env(safe-area-inset-left, 0px));
   bottom: calc(152px + env(safe-area-inset-bottom, 0px));
   z-index: 510;
   display: inline-flex;

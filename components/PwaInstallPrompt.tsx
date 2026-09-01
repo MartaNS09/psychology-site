@@ -8,8 +8,9 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
-const SESSION_KEY = "pwa-install-session";
-const SHOW_DELAY_MS = 5 * 60 * 1000;
+const DISMISS_KEY = "pwa-install-dismissed";
+const DISMISS_DAYS = 7;
+const SHOW_DELAY_MS = 45 * 1000;
 
 function isStandalone() {
   return (
@@ -23,24 +24,28 @@ function isIos() {
   return /iphone|ipad|ipod/i.test(navigator.userAgent);
 }
 
-function isHandledThisSession() {
+function isDismissedRecently() {
   try {
-    return sessionStorage.getItem(SESSION_KEY) === "1";
+    const raw = localStorage.getItem(DISMISS_KEY);
+    if (!raw) return false;
+    const dismissedAt = Number(raw);
+    if (!Number.isFinite(dismissedAt)) return false;
+    return Date.now() - dismissedAt < DISMISS_DAYS * 24 * 60 * 60 * 1000;
   } catch {
     return false;
   }
 }
 
-function markSessionHandled() {
+function markDismissed() {
   try {
-    sessionStorage.setItem(SESSION_KEY, "1");
+    localStorage.setItem(DISMISS_KEY, String(Date.now()));
   } catch {
     /* ignore */
   }
 }
 
 function shouldShowPrompt() {
-  return !isStandalone() && !isHandledThisSession();
+  return !isStandalone() && !isDismissedRecently();
 }
 
 export function PwaInstallPrompt() {
@@ -48,14 +53,16 @@ export function PwaInstallPrompt() {
   const [visible, setVisible] = useState(false);
   const [iosHint, setIosHint] = useState(false);
 
+  const openPrompt = useCallback((ios: boolean) => {
+    if (!shouldShowPrompt()) return;
+    if (ios) setIosHint(true);
+    setVisible(true);
+  }, []);
+
   useEffect(() => {
     if (!shouldShowPrompt()) return;
 
-    const timer = window.setTimeout(() => {
-      if (!shouldShowPrompt()) return;
-      if (isIos()) setIosHint(true);
-      setVisible(true);
-    }, SHOW_DELAY_MS);
+    const timer = window.setTimeout(() => openPrompt(isIos()), SHOW_DELAY_MS);
 
     const onBip = (e: Event) => {
       if (!shouldShowPrompt()) return;
@@ -63,6 +70,7 @@ export function PwaInstallPrompt() {
       setDeferred(e as BeforeInstallPromptEvent);
       setIosHint(false);
       clearTimeout(timer);
+      setVisible(true);
     };
 
     window.addEventListener("beforeinstallprompt", onBip);
@@ -70,15 +78,15 @@ export function PwaInstallPrompt() {
       clearTimeout(timer);
       window.removeEventListener("beforeinstallprompt", onBip);
     };
-  }, []);
+  }, [openPrompt]);
 
   const dismiss = useCallback(() => {
     setVisible(false);
-    markSessionHandled();
+    markDismissed();
   }, []);
 
   const install = useCallback(async () => {
-    markSessionHandled();
+    markDismissed();
     if (deferred) {
       await deferred.prompt();
       const { outcome } = await deferred.userChoice;
