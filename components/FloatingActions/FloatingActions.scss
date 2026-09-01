@@ -1,0 +1,24 @@
+.floating-actions {
+  .ambient-sound,
+  .chat-widget {
+    transition:
+      opacity 0.45s ease,
+      transform 0.45s ease,
+      visibility 0.45s ease;
+  }
+
+  &:not(.floating-actions_visible) .ambient-sound,
+  &:not(.floating-actions_visible) .chat-widget:not(.chat-widget_open) {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px);
+    pointer-events: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-actions .ambient-sound,
+  .floating-actions .chat-widget {
+    transition: none;
+  }
+}

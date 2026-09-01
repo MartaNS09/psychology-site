@@ -29,15 +29,17 @@
     left: 0;
     right: 0;
     width: 100%;
+    z-index: 1000;
     height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
     padding-top: env(safe-area-inset-top, 0px);
     box-sizing: border-box;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    background-color: rgba(252, 250, 242, 0.97);
+    transform: translate3d(0, 0, 0);
+    background-color: rgba(252, 250, 242, 0.98);
 
     [data-theme="dark"] & {
-      background-color: rgba(11, 11, 11, 0.94);
+      background-color: rgba(11, 11, 11, 0.96);
     }
   }
 

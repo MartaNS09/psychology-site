@@ -3,11 +3,16 @@
 import { useEffect, useState } from "react";
 import { siteConfig } from "@/lib/seo/site-config";
 import { ContactForm } from "@/components/ui/ContactForm";
+import { cn } from "@/utils";
 import "./ChatWidget.scss";
 
 const NUDGE_DURATION_MS = 30_000;
 
-export function ChatWidget() {
+interface ChatWidgetProps {
+  onOpenChange?: (open: boolean) => void;
+}
+
+export function ChatWidget({ onOpenChange }: ChatWidgetProps) {
   const [open, setOpen] = useState(false);
   const [panelDismissed, setPanelDismissed] = useState(false);
   const [showNudge, setShowNudge] = useState(false);
@@ -29,6 +34,7 @@ export function ChatWidget() {
 
   function handleClosePanel() {
     setOpen(false);
+    onOpenChange?.(false);
     setPanelDismissed(true);
     setShowNudge(false);
     sessionStorage.setItem("chat-panel-dismissed", "1");
@@ -36,11 +42,12 @@ export function ChatWidget() {
 
   function handleOpen() {
     setOpen(true);
+    onOpenChange?.(true);
     setShowNudge(false);
   }
 
   return (
-    <div className="chat-widget" aria-live="polite">
+    <div className={cn("chat-widget", open && "chat-widget_open")} aria-live="polite">
       {open && (
         <div
           className="chat-widget__panel"
@@ -99,7 +106,14 @@ export function ChatWidget() {
       <button
         type="button"
         className="chat-widget__toggle"
-        onClick={() => (open ? setOpen(false) : handleOpen())}
+        onClick={() => {
+          if (open) {
+            setOpen(false);
+            onOpenChange?.(false);
+          } else {
+            handleOpen();
+          }
+        }}
         aria-label={open ? "Свернуть чат" : "Открыть чат"}
         aria-expanded={open}
       >

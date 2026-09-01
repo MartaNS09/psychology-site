@@ -1,7 +1,7 @@
 .ambient-sound {
   position: fixed;
   left: calc(var(--space-md) + env(safe-area-inset-left, 0px));
-  bottom: calc(152px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(var(--space-lg) + env(safe-area-inset-bottom, 0px));
   z-index: 510;
   display: inline-flex;
   align-items: center;
@@ -20,15 +20,13 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition:
+    opacity 0.45s ease,
+    transform 0.45s ease,
+    visibility 0.45s ease,
     background-color var(--transition-base),
     border-color var(--transition-base),
     color var(--transition-base),
-    box-shadow var(--transition-base),
-    transform var(--transition-fast);
-
-  @media (min-width: 1024px) {
-    bottom: calc(88px + env(safe-area-inset-bottom, 0px));
-  }
+    box-shadow var(--transition-base);
 
   &:hover {
     transform: translateY(-2px);
@@ -52,12 +50,33 @@
 
 @media (max-width: 767px) {
   .ambient-sound {
-    padding: var(--space-sm);
-    min-width: 48px;
-    min-height: 48px;
+    min-width: 40px;
+    min-height: 40px;
+    padding: var(--space-xs);
+    border-width: 1.5px;
+  }
+
+  .ambient-sound__icon {
+    font-size: 1rem;
   }
 
   .ambient-sound__label {
     display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .ambient-sound:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-sound {
+    transition:
+      background-color var(--transition-base),
+      border-color var(--transition-base),
+      color var(--transition-base),
+      box-shadow var(--transition-base);
   }
 }
