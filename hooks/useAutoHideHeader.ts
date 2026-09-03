@@ -2,56 +2,55 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const SCROLL_DELTA = 8;
-const TOP_THRESHOLD = 32;
-const IDLE_MS = 1200;
+const SCROLL_DELTA = 10;
+const TOP_THRESHOLD = 24;
 
 export function useAutoHideHeader(enabled: boolean, forceVisible: boolean) {
   const [visible, setVisible] = useState(true);
   const lastY = useRef(0);
-  const idleTimer = useRef<number | null>(null);
+  const visibleRef = useRef(true);
+  const ticking = useRef(false);
 
   useEffect(() => {
-    if (!enabled) {
+    if (!enabled || forceVisible) {
+      visibleRef.current = true;
       setVisible(true);
       return;
     }
 
-    if (forceVisible) {
-      setVisible(true);
-      return;
-    }
+    lastY.current = window.scrollY || 0;
 
-    lastY.current = window.scrollY;
-
-    const scheduleShow = () => {
-      if (idleTimer.current) window.clearTimeout(idleTimer.current);
-      idleTimer.current = window.setTimeout(() => setVisible(true), IDLE_MS);
+    const apply = (next: boolean) => {
+      if (visibleRef.current === next) return;
+      visibleRef.current = next;
+      setVisible(next);
     };
 
-    const onScroll = () => {
-      const y = window.scrollY;
+    const update = () => {
+      ticking.current = false;
+      const y = window.scrollY || document.documentElement.scrollTop || 0;
 
       if (y <= TOP_THRESHOLD) {
-        setVisible(true);
+        apply(true);
         lastY.current = y;
-        scheduleShow();
         return;
       }
 
       const delta = y - lastY.current;
-      if (delta > SCROLL_DELTA) setVisible(false);
-      else if (delta < -SCROLL_DELTA) setVisible(true);
+      if (delta > SCROLL_DELTA) apply(false);
+      else if (delta < -SCROLL_DELTA) apply(true);
 
       lastY.current = y;
-      scheduleShow();
+    };
+
+    const onScroll = () => {
+      if (ticking.current) return;
+      ticking.current = true;
+      requestAnimationFrame(update);
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (idleTimer.current) window.clearTimeout(idleTimer.current);
-    };
+    return () => window.removeEventListener("scroll", onScroll);
   }, [enabled, forceVisible]);
 
   return visible;

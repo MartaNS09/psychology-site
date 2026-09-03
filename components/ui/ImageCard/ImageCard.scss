@@ -103,17 +103,18 @@
 
   &__media {
     position: relative;
-    height: clamp(160px, 42vw, 210px);
+    height: clamp(180px, 48vw, 230px);
     overflow: hidden;
     flex-shrink: 0;
 
     @include tablet-up {
-      height: 220px;
+      height: 240px;
     }
   }
 
   &__image {
     object-fit: cover;
+    object-position: center 18%;
     transition: transform var(--transition-slow) ease;
   }
 
@@ -253,7 +254,11 @@
     cursor: default;
 
     .image-card__media {
-      height: clamp(150px, 40vw, 190px);
+      height: clamp(176px, 46vw, 220px);
+    }
+
+    .image-card__image {
+      object-position: center 15%;
     }
 
     .image-card__body {

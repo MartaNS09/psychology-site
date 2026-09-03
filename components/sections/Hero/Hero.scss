@@ -46,13 +46,11 @@
 
   &__video-fallback_kenburns {
     .hero__video-poster {
-      animation: hero-kenburns 28s ease-in-out infinite alternate;
+      animation: hero-kenburns 32s ease-in-out infinite alternate;
       transform-origin: center center;
-      will-change: transform;
 
       @media (prefers-reduced-motion: reduce) {
         animation: none;
-        will-change: auto;
       }
     }
   }
@@ -333,14 +331,10 @@
 
 @keyframes hero-kenburns {
   0% {
-    transform: scale(1) translate3d(0, 0, 0);
-  }
-
-  50% {
-    transform: scale(1.1) translate3d(-1.5%, -0.8%, 0);
+    transform: scale(1);
   }
 
   100% {
-    transform: scale(1.06) translate3d(1%, 0.5%, 0);
+    transform: scale(1.08);
   }
 }

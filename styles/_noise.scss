@@ -10,6 +10,11 @@
     background-repeat: repeat;
     background-size: 180px 180px;
     mix-blend-mode: overlay;
+
+    /* Fixed + blend на всём viewport сильно лагает на iOS при скролле вверх */
+    @media (max-width: 767px) {
+      display: none;
+    }
   }
 
   [data-theme="dark"] &::before {
