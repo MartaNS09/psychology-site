@@ -8,31 +8,47 @@ interface HeroVideoBackgroundProps {
   poster: string;
 }
 
+const MOBILE_MQ = "(max-width: 767px)";
+
 export function HeroVideoBackground({ src, poster }: HeroVideoBackgroundProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduceMotion(mq.matches);
+    const motionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mobileMq = window.matchMedia(MOBILE_MQ);
 
-    const handler = (e: MediaQueryListEvent) => setReduceMotion(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
+    const sync = () => {
+      setReduceMotion(motionMq.matches);
+      setIsMobile(mobileMq.matches);
+    };
+
+    sync();
+    motionMq.addEventListener("change", sync);
+    mobileMq.addEventListener("change", sync);
+    return () => {
+      motionMq.removeEventListener("change", sync);
+      mobileMq.removeEventListener("change", sync);
+    };
   }, []);
 
   useEffect(() => {
-    if (reduceMotion || !videoRef.current) return;
+    if (reduceMotion || isMobile || !videoRef.current) return;
 
     const video = videoRef.current;
     video.play().catch(() => {
       /* autoplay blocked — poster remains visible */
     });
-  }, [reduceMotion]);
+  }, [reduceMotion, isMobile]);
 
-  if (reduceMotion) {
+  /* Mobile / reduced motion: static poster + soft Ken Burns — no video decode lag */
+  if (reduceMotion || isMobile) {
     return (
-      <div className="hero__video-fallback" aria-hidden="true">
+      <div
+        className={`hero__video-fallback${reduceMotion ? "" : " hero__video-fallback_kenburns"}`}
+        aria-hidden="true"
+      >
         <OptimizedImage
           src={poster}
           alt=""

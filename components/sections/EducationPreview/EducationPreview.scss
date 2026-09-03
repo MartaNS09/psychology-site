@@ -4,6 +4,10 @@
   padding-block: var(--space-3xl);
   background-color: var(--color-bg-secondary);
 
+  @include mobile {
+    padding-block: var(--space-2xl);
+  }
+
   @include tablet-up {
     padding-block: var(--space-4xl);
   }
@@ -11,6 +15,10 @@
   &__header {
     text-align: center;
     margin-bottom: var(--space-2xl);
+
+    @include mobile {
+      margin-bottom: var(--space-lg);
+    }
   }
 
   &__eyebrow {
@@ -59,6 +67,10 @@
   &__footer {
     text-align: center;
     margin-top: var(--space-2xl);
+
+    @include mobile {
+      margin-top: var(--space-lg);
+    }
   }
 
   &__link {

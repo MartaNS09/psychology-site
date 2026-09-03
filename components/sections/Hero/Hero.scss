@@ -33,6 +33,7 @@
 
   &__video {
     object-fit: cover;
+    will-change: auto;
   }
 
   &__video-fallback {
@@ -41,6 +42,19 @@
 
   &__video-poster {
     object-fit: cover;
+  }
+
+  &__video-fallback_kenburns {
+    .hero__video-poster {
+      animation: hero-kenburns 28s ease-in-out infinite alternate;
+      transform-origin: center center;
+      will-change: transform;
+
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+        will-change: auto;
+      }
+    }
   }
 
   &__overlay {
@@ -314,5 +328,19 @@
 
   &__button_primary {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  }
+}
+
+@keyframes hero-kenburns {
+  0% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: scale(1.1) translate3d(-1.5%, -0.8%, 0);
+  }
+
+  100% {
+    transform: scale(1.06) translate3d(1%, 0.5%, 0);
   }
 }
