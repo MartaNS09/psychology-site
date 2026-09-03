@@ -121,6 +121,10 @@
     box-shadow: var(--shadow-sm);
     white-space: nowrap;
     animation: chatNudge 3s ease-in-out infinite;
+
+    @include mobile {
+      animation: none;
+    }
   }
 
   &__toggle {

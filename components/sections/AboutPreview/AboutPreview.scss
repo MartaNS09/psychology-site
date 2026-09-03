@@ -28,6 +28,10 @@
 
     &_animated {
       animation: floatSlow 8s ease-in-out infinite;
+
+      @include mobile {
+        animation: none;
+      }
     }
   }
 

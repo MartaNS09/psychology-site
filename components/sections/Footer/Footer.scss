@@ -211,3 +211,14 @@
     }
   }
 }
+
+@media (max-width: 767px) {
+  .footer__dev-link_glow {
+    animation: none;
+
+    &::after {
+      animation: none;
+      opacity: 0;
+    }
+  }
+}

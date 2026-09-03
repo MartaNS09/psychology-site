@@ -15,12 +15,14 @@ import "./Header.scss";
 export function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const isMobile = useMediaQuery("(max-width: 767px)");
-  const headerVisible = useAutoHideHeader(isMobile, menuOpen);
+  useAutoHideHeader(isMobile, menuOpen);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const root = document.documentElement;
+    const onScroll = () => {
+      root.classList.toggle("header-is-scrolled", window.scrollY > 24);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -41,12 +43,7 @@ export function Header() {
     <>
       <div className="header-anchor" aria-hidden="true">
         <header
-          className={cn(
-            "header",
-            scrolled && "header_scrolled",
-            menuOpen && "header_menu-open",
-            isMobile && !headerVisible && "header_hidden"
-          )}
+          className={cn("header", menuOpen && "header_menu-open")}
           role="banner"
         >
           <Container className="header__inner">

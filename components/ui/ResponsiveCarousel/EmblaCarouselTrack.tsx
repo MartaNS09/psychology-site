@@ -16,6 +16,8 @@ export function EmblaCarouselTrack({ slides, slideClassName, ariaLabel }: EmblaC
     containScroll: "trimSnaps",
     dragFree: false,
     skipSnaps: false,
+    watchResize: false,
+    watchSlides: false,
   });
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
@@ -33,13 +35,24 @@ export function EmblaCarouselTrack({ slides, slideClassName, ariaLabel }: EmblaC
     emblaApi.on("select", onSelect);
     emblaApi.on("reInit", onReInit);
 
-    const ro = new ResizeObserver(() => emblaApi.reInit());
+    /* Только ширина: высота viewport на iOS прыгает при скролле вверх (панель Safari) */
+    let lastWidth = Math.round(emblaApi.rootNode().getBoundingClientRect().width);
+    let timer: number | null = null;
+
+    const ro = new ResizeObserver((entries) => {
+      const width = Math.round(entries[0]?.contentRect.width ?? 0);
+      if (Math.abs(width - lastWidth) < 2) return;
+      lastWidth = width;
+      if (timer) window.clearTimeout(timer);
+      timer = window.setTimeout(() => emblaApi.reInit(), 180);
+    });
     ro.observe(emblaApi.rootNode());
 
     return () => {
       emblaApi.off("select", onSelect);
       emblaApi.off("reInit", onReInit);
       ro.disconnect();
+      if (timer) window.clearTimeout(timer);
     };
   }, [emblaApi]);
 

@@ -458,3 +458,17 @@
       box-shadow var(--transition-base);
   }
 }
+
+html.header-is-scrolled .header {
+  border-bottom-color: var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+html.header-is-hidden {
+  @include mobile {
+    .header {
+      transform: translate3d(0, calc(-100% - env(safe-area-inset-top, 0px)), 0);
+      pointer-events: none;
+    }
+  }
+}
